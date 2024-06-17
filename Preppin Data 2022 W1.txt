@@ -1,0 +1,37 @@
+select * from pd2022_wk01;
+
+select "pupil last name" pln, "Parental Contact Name_1" p1name, "Parental Contact Name_2" p2name, 
+concat("pupil last name", ', ', "pupil first name") as pupilfullname, "Date of Birth" dob, 
+concat("pupil last name",', ', "Parental Contact Name_1") as parentname1, concat("pupil last name", ', ', "Parental Contact Name_2") as parentname2, "Parental Contact" pc
+from pd2022_wk01;
+
+select nt.pupilfullname, nt.pln, nt.dob, case when nt.pc = 1 then nt.parentname1 else nt.parentname2 end as parentname,
+case when nt.pc = 1 then nt.p1name else nt.p2name end pfirstname
+from
+(select "pupil last name" pln, "Parental Contact Name_1" p1name, "Parental Contact Name_2" p2name, 
+concat("pupil last name", ', ', "pupil first name") as pupilfullname, "Date of Birth" dob, 
+concat("pupil last name",', ', "Parental Contact Name_1") as parentname1, concat("pupil last name", ', ', "Parental Contact Name_2") as parentname2, "Parental Contact" pc
+from pd2022_wk01) as nt;
+
+select t2.pupilfullname, t2.dob, t2.parentname, concat(t2.pfirstname,'.',t2.pln, '@', t2.pce, '.com') as parentemail from
+(select nt.pupilfullname, nt.pln, nt.pce, nt.dob, case when nt.pc = 1 then nt.parentname1 else nt.parentname2 end as parentname,
+case when nt.pc = 1 then nt.p1name else nt.p2name end pfirstname from
+(select "pupil last name" pln, "Preferred Contact Employer" pce, "Parental Contact Name_1" p1name, "Parental Contact Name_2" p2name, 
+concat("pupil last name", ', ', "pupil first name") as pupilfullname, "Date of Birth" dob, 
+concat("pupil last name",', ', "Parental Contact Name_1") as parentname1, concat("pupil last name", ', ', "Parental Contact Name_2") as parentname2, "Parental Contact" pc
+from pd2022_wk01) as nt) as t2;
+
+select t3.pupilfullname, t3.parentname, t3.parentemail,
+case when t3.dob >= '2014-09-01' then 1
+when t3.dob >= '2013-09-01' and t3.dob < '2014-09-01' then 2
+when t3.dob >= '2012-09-01' and t3.dob < '2013-09-01' then 3
+when t3.dob >= '2011-09-01' and t3.dob < '2012-09-01' then 4
+when t3.dob >= '2010-09-01' and t3.dob < '2011-09-01' then 5 end as academicyear
+from (select t2.pupilfullname, t2.dob, t2.parentname, concat(t2.pfirstname,'.',t2.pln, '@', t2.pce, '.com') as parentemail from
+(select nt.pupilfullname, nt.pln, nt.pce, nt.dob, case when nt.pc = 1 then nt.parentname1 else nt.parentname2 end as parentname,
+case when nt.pc = 1 then nt.p1name else nt.p2name end pfirstname from
+(select "pupil last name" pln, "Preferred Contact Employer" pce, "Parental Contact Name_1" p1name, "Parental Contact Name_2" p2name, 
+concat("pupil last name", ', ', "pupil first name") as pupilfullname, "Date of Birth" dob, 
+concat("pupil last name",', ', "Parental Contact Name_1") as parentname1, concat("pupil last name", ', ', "Parental Contact Name_2") as parentname2, "Parental Contact" pc
+from pd2022_wk01) as nt) as t2) as t3;
+
