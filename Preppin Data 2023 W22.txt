@@ -1,0 +1,15 @@
+select att.student_name, att.attendance_percentage, sts.student_id, sts.subject, sts.test_score
+from pd2023_wk22_attendance_figures att 
+inner join pd2023_wk22_student_test_scores sts on att.student_name = sts.student_name;
+
+select t2.student_id, split_part(t2.student_name, '_' ,1) firstname, split_part(t2.student_name, '_' ,2) lastname,  
+case when t2.subject = 'Sciece' then 'Science'
+when t2.subject = 'Engish' then 'English'
+else t2.subject end as subject, round(t2.test_score, 0) test_score, t2.attendance_percentage,
+case when t2.attendance_percentage < 0.7 then 'Low Attendance'
+when t2.attendance_percentage > 0.9 then 'High Attendance'
+else 'Medium Attendance' end as attendance_flag
+from
+(select att.student_name, att.attendance_percentage, sts.student_id, sts.subject, sts.test_score
+from pd2023_wk22_attendance_figures att 
+inner join pd2023_wk22_student_test_scores sts on att.student_name = sts.student_name) t2;
