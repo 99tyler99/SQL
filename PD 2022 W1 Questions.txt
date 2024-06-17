@@ -1,0 +1,51 @@
+2022: Week 1 The Prep School - Parental Contact Details
+January 05, 2022
+Challenge by: Carl Allchin
+
+Welcome to Preppin' Data 2022. When Jonathan and I started Preppin' back in 2019 I never thought we'd be still thinking up challenges after this long. But we are seeing lots of people still wanting to practice their data prep skills so Jenny, Tom and myself will keep creating fun challenges for you to be ready for data prep challenges. 
+
+Data preparation is a skill that is increasingly becoming necessary in the workplace. We are all surrounded with data sets that can help us answer questions that can improve how we work. Rarely is that data ready for analysis. Either the values are messy or the data just simply isn't structured in a way that makes analysis easy. If you want to know more about what data structures are good for analysis: read this post.
+
+I've found with most organisations I have worked with, it's rare someone will get the chance to practice data preparation skills. After all, which company wants to let their employees play with data sets? We created Preppin' Data to allow you to have a place to practice your skills so you are ready for using data prep skills in your role. 
+
+If you are new to Preppin' Data, here is a brief guide as to the key steps:
+We release a new challenge each Wednesday
+Download the data set
+Follow the requirements
+Try to create the transformational steps to produce the exact same output
+You can complete the data preparation in any tool or language you want to use
+Don't forget to fill in the participation tracker! 
+Send us a screenshot of your solution on Twitter to share your knowledge with others
+We will release our solution in Tableau Prep on the following Tuesday
+As we did last year, January's challenges are aimed at people who might be new to the challenges. We are providing links to useful content to help learn how to take on each step in Tableau Prep if you are unsure. Lots of logic of the techniques will be applicable across tools. This year, January's challenges are going to be helping our new organisation to get their data sets cleaned. We are focusing on The Prep School. 
+
+This week's challenge involves creating contact details for parents. We have the pupil's name, although it's not in the correct format, and will use the pupil's last name to match to the parent's details. We also have the employer for the parental contact so we can form an email address to contact them.
+Input
+One .csv file (download here): 
+
+
+
+Requirements
+Input the csv file (link above) (help)
+Form the pupil's name correctly for the records in the format Last Name, First Name (help)
+Form the parental contact's name in the same format as the pupil's 
+The Parental Contact Name 1 and 2 are the first names of each parent.
+Use parental contact column to select which parent first name to use along with the pupil's last name
+Create the email address to contact the parent using the format Parent First Name.Parent Last Name@Employer.com
+Create the academic year the pupils are in (help)
+Each academic year starts on 1st September.
+Year 1 is anyone born after 1st Sept 2014 
+Year 2 is anyone born between 1st Sept 2013 and 31st Aug 2014 etc
+Remove any unnecessary columns of data (help)
+Output the data (help)
+Output
+
+
+One file containing:
+
+4 data fields:
+Academic Year
+Pupil's Name
+Parental Contact Full Name
+Parental Contact Email Address
+1000 rows (1001 including headers)

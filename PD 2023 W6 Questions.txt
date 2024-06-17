@@ -1,0 +1,33 @@
+2023: Week 6 - DSB Customer Ratings
+February 08, 2023
+ Challenge by: Jenny Martin
+
+For the second intermediate challenge, Data Source Bank are interested in surveying their customers. They're trying to work out whether users prefer to use the Online Interface for their banking requirements, or whether they prefer the Mobile App. Customers can be quite fickle and so it's probably best to take some of their ratings with a pinch of salt! We'll use an aggregated view to hopefully cut through the noise.
+
+Input
+The results of a survey asking customers to rate, on a scale of 1-5, different areas for the Mobile App and the Online Interface.
+
+
+
+Requirements
+Input the data
+Reshape the data so we have 5 rows for each customer, with responses for the Mobile App and Online Interface being in separate fields on the same row
+Clean the question categories so they don't have the platform in from of them
+e.g. Mobile App - Ease of Use should be simply Ease of Use
+Exclude the Overall Ratings, these were incorrectly calculated by the system
+Calculate the Average Ratings for each platform for each customer 
+Calculate the difference in Average Rating between Mobile App and Online Interface for each customer
+Catergorise customers as being:
+Mobile App Superfans if the difference is greater than or equal to 2 in the Mobile App's favour
+Mobile App Fans if difference >= 1
+Online Interface Fan
+Online Interface Superfan
+Neutral if difference is between 0 and 1
+Calculate the Percent of Total customers in each category, rounded to 1 decimal place
+Output the data
+Output
+
+2 fields
+Preference
+% of Total
+5 rows
