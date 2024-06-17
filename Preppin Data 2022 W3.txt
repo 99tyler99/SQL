@@ -1,0 +1,29 @@
+select w1."gender", w3.* from pd2022_wk01 w1
+inner join pd2022_wk03 w3 on w1."id" = w3."Student ID";
+
+select "Student ID", "gender", round(("Maths"+"English"+"Spanish"+"Science"+"Art"+"History"+"Geography")/7,1) as avggrade,
+case when "Maths" >= 75 then 1 else 0 end as mathpass,
+case when "English" >= 75 then 1 else 0 end as englishpass,
+case when "Spanish" >= 75 then 1 else 0 end as spanishpass,
+case when "Science" >= 75 then 1 else 0 end as sciencepass,
+case when "Art" >= 75 then 1 else 0 end as artpass,
+case when "History" >= 75 then 1 else 0 end as historypass,
+case when "Geography" >= 75 then 1 else 0 end as geographypass
+from
+(select w1."gender", w3.* from pd2022_wk01 w1
+inner join pd2022_wk03 w3 on w1."id" = w3."Student ID");
+
+select mathpass+englishpass+spanishpass+sciencepass+artpass+historypass+geographypass as passedsubjects,
+avggrade, studentid, gender
+from 
+(select "Student ID" studentid, "gender" gender, round(("Maths"+"English"+"Spanish"+"Science"+"Art"+"History"+"Geography")/7,1) as avggrade,
+case when "Maths" >= 75 then 1 else 0 end as mathpass,
+case when "English" >= 75 then 1 else 0 end as englishpass,
+case when "Spanish" >= 75 then 1 else 0 end as spanishpass,
+case when "Science" >= 75 then 1 else 0 end as sciencepass,
+case when "Art" >= 75 then 1 else 0 end as artpass,
+case when "History" >= 75 then 1 else 0 end as historypass,
+case when "Geography" >= 75 then 1 else 0 end as geographypass
+from
+(select w1."gender", w3.* from pd2022_wk01 w1
+inner join pd2022_wk03 w3 on w1."id" = w3."Student ID"));
