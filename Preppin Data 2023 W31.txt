@@ -1,0 +1,35 @@
+select * from pd2023_wk31_employee;
+select * from pd2023_wk31_monthly;
+
+select 
+case when e.employee_id is null then m.employee_id else e.employee_id end as emp_id,
+case when e.guid is null then m.guid else e.guid end as guid2
+from pd2023_wk31_employee e left join pd2023_wk31_monthly m
+on e.employee_id = m.employee_id or e.guid = m.guid
+group by emp_id, guid2
+order by emp_id;
+
+select t2.emp_id, t2.guid2 guid, min(e.first_name) first_name, min(e.last_name) last_name, min(e.date_of_birth) dob, 
+min(e.nationality) nationality, min(e.gender) gender, min(e.email) email, min(e.hire_date) hiredate, max(e.leave_date) leavedate
+from pd2023_wk31_employee e left join
+(select case when e.employee_id is null then m.employee_id else e.employee_id end as emp_id,
+case when e.guid is null then m.guid else e.guid end as guid2
+from pd2023_wk31_employee e left join pd2023_wk31_monthly m
+on e.employee_id = m.employee_id or e.guid = m.guid
+group by emp_id, guid2
+order by emp_id) t2 
+on e.employee_id = t2.emp_id
+or e.guid = t2.guid2
+group by t2.emp_id, t2.guid2
+order by t2.emp_id;
+
+select t2.emp_id, t2.guid2 guid, m.dc_nbr, m.month_end_date, m.hire_date, m.leave_date
+from pd2023_wk31_monthly m left join 
+(select case when e.employee_id is null then m.employee_id else e.employee_id end as emp_id,
+case when e.guid is null then m.guid else e.guid end as guid2
+from pd2023_wk31_employee e left join pd2023_wk31_monthly m
+on e.employee_id = m.employee_id or e.guid = m.guid
+group by emp_id, guid2
+order by emp_id) t2
+on m.employee_id = t2.emp_id
+or m.guid = t2.guid2;
