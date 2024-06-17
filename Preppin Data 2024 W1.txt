@@ -1,0 +1,19 @@
+select split_part(flight_details,'//',1) date, split_part(flight_details,'//',2) flight_number,
+split_part(flight_details,'//',3) cities, split_part(flight_details,'//',4) class, split_part(flight_details,'//',5) price, flow_card, bags_checked, meal_type
+from pd2024_wk01;
+
+select to_date(date) date, flight_number, split_part(cities, '-', 1) origin, split_part(cities, '-', 2) destination, class, round(price,2) price, flow_card, bags_checked, meal_type
+from
+(select split_part(flight_details,'//',1) date, split_part(flight_details,'//',2) flight_number,
+split_part(flight_details,'//',3) cities, split_part(flight_details,'//',4) class, split_part(flight_details,'//',5) price, 
+case when flow_card = 1 then 'Yes' else 'No' end as flow_card, bags_checked, meal_type
+from pd2024_wk01)
+where flow_card = 'Yes';
+
+select to_date(date) date, flight_number, split_part(cities, '-', 1) origin, split_part(cities, '-', 2) destination, class, round(price,2) price, flow_card, bags_checked, meal_type
+from
+(select split_part(flight_details,'//',1) date, split_part(flight_details,'//',2) flight_number,
+split_part(flight_details,'//',3) cities, split_part(flight_details,'//',4) class, split_part(flight_details,'//',5) price, 
+case when flow_card = 1 then 'Yes' else 'No' end as flow_card, bags_checked, meal_type
+from pd2024_wk01)
+where flow_card = 'No';
