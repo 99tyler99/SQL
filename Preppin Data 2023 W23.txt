@@ -1,0 +1,56 @@
+select * from pd2023_wk23_student_info;
+
+select * from pd2023_wk23_results;
+
+select * from pd2023_wk23_student_info s
+inner join pd2023_wk23_results r 
+on s.x_student_id = r.student_id;
+
+select class,subject,grade, from
+(select * from pd2023_wk23_student_info s
+inner join pd2023_wk23_results r 
+on s.x_student_id = r.student_id)
+unpivot(grade for subject in (english, economics, psychology));
+
+select subject, avg(grade) class_average, class from
+(select class,subject,grade, from
+(select * from pd2023_wk23_student_info s
+inner join pd2023_wk23_results r 
+on s.x_student_id = r.student_id)
+unpivot(grade for subject in (english, economics, psychology))) 
+group by subject, class
+order by class_average;
+
+select subject, min(class_average) as minimum from
+(select subject, avg(grade) class_average, class from
+(select class,subject,grade, from
+(select * from pd2023_wk23_student_info s
+inner join pd2023_wk23_results r 
+on s.x_student_id = r.student_id)
+unpivot(grade for subject in (english, economics, psychology)))
+group by subject, class
+order by class_average)
+group by subject;
+
+select min_table.subject, min_table.minimum, big_table.class from
+(select subject, min(class_average) as minimum from
+(select subject, avg(grade) class_average, class from
+(select class,subject,grade, from
+(select * from pd2023_wk23_student_info s
+inner join pd2023_wk23_results r 
+on s.x_student_id = r.student_id)
+unpivot(grade for subject in (english, economics, psychology)))
+group by subject, class
+order by class_average)
+group by subject) as min_table
+inner join 
+(select subject, avg(grade) class_average, class from
+(select class,subject,grade, from
+(select * from pd2023_wk23_student_info s
+inner join pd2023_wk23_results r 
+on s.x_student_id = r.student_id)
+unpivot(grade for subject in (english, economics, psychology))) 
+group by subject, class
+order by class_average) as big_table
+on min_table.minimum = big_table.class_average;
+
