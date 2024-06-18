@@ -1,0 +1,49 @@
+2023: Week 8 - Taking Stock
+February 22, 2023
+ Created by: Carl Allchin
+
+For the final week of Intermediate Month, our data set needs so cleaning and grouping to allow us to analyse the top trades from The Data Source Bank's trading floor. 
+
+No Wolf on Wall Street moments have happened but we've had some big trades happen across a wide range of companies so we need to understand these more. Can you help us find the top 5 trades for a series of different ways we look at the companies traded and the prices of the trades?
+
+Input
+There are 12 files to input this week. Each number in the file name reflects the month it came from (January's file doesn't have a value)
+
+The data can be found here
+
+
+Requirements
+Input each of the 12 monthly files
+Create a 'file date' using the month found in the file name
+The Null value should be replaced as 1
+Clean the Market Cap value to ensure it is the true value as 'Market Capitalisation'
+Remove any rows with 'n/a'
+Categorise the Purchase Price into groupings
+0 to 24,999.99 as 'Low'
+25,000 to 49,999.99 as 'Medium'
+50,000 to 74,999.99 as 'High'
+75,000 to 100,000 as 'Very High'
+Categorise the Market Cap into groupings
+Below $100M as 'Small'
+Between $100M and below $1B as 'Medium'
+Between $1B and below $100B as 'Large' 
+$100B and above as 'Huge'
+Rank the highest 5 purchases per combination of: file date, Purchase Price Categorisation and Market Capitalisation Categorisation.
+Output only records with a rank of 1 to 5
+Output
+
+
+One file:
+
+10 data fields:
+Market Capitalisation Categorisation
+Purchase Price Categorisation
+File Date
+Ticker
+Sector
+Market
+Stock Name
+Market Capitalisation
+Purchase Price
+Rank
+831 rows (832 rows incl. headers)

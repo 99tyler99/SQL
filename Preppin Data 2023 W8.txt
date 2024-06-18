@@ -1,0 +1,110 @@
+select *, '1' as month from pd2023_wk08_01 union
+select *, '2' as month from pd2023_wk08_02 union
+select *, '3' as month from pd2023_wk08_03 union
+select *, '4' as month from pd2023_wk08_04 union
+select *, '5' as month from pd2023_wk08_05 union
+select *, '6' as month from pd2023_wk08_06 union
+select *, '7' as month from pd2023_wk08_07 union
+select *, '8' as month from pd2023_wk08_08 union
+select *, '9' as month from pd2023_wk08_09 union
+select *, '10' as month from pd2023_wk08_10 union
+select *, '11' as month from pd2023_wk08_11 union
+select *, '12' as month from pd2023_wk08_12;
+
+select ft.month, ft.ticker, ft.sector, ft.market, ft.stock_name, substr(ft.market_cap, 2, length(ft.market_cap)-2) marketcap2, right(ft.market_cap,1) as unit, 
+case when unit = 'M' then round(marketcap2*1000000,0)
+when unit = 'B' then round(marketcap2*1000000000,0) 
+else round(marketcap2,0) end as marketcap, ft.purchase_price, 
+case when substr(ft.purchase_price,2) < 25000 then 'Low' 
+when substr(ft.purchase_price,2) >= 25000 and substr(ft.purchase_price,2) < 50000 then 'Medium'
+when substr(ft.purchase_price,2) >= 50000 and substr(ft.purchase_price,2) < 75000 then 'High'
+else 'Very High' end as price_category,
+case when marketcap < 100000000 then 'Small'
+when marketcap >= 100000000 and marketcap < 1000000000 then 'Medium'
+when marketcap >= 1000000000 and marketcap < 100000000000 then 'Large'
+else 'Huge' end as marketcap_category
+from
+(select *, '1' as month from pd2023_wk08_01 union
+select *, '2' as month from pd2023_wk08_02 union
+select *, '3' as month from pd2023_wk08_03 union
+select *, '4' as month from pd2023_wk08_04 union
+select *, '5' as month from pd2023_wk08_05 union
+select *, '6' as month from pd2023_wk08_06 union
+select *, '7' as month from pd2023_wk08_07 union
+select *, '8' as month from pd2023_wk08_08 union
+select *, '9' as month from pd2023_wk08_09 union
+select *, '10' as month from pd2023_wk08_10 union
+select *, '11' as month from pd2023_wk08_11 union
+select *, '12' as month from pd2023_wk08_12) ft
+where ft.market_cap != 'n/a';
+
+select to_double(t3.month) month, t3.ticker, t3.sector, t3.market, t3.stock_name, t3.marketcap, t3.purchase_price, t3.marketcap_category, t3.price_category,
+case when t3.price_category = 'Low' then 1
+when t3.price_category = 'Medium' then 2 
+when t3.price_category = 'High' then 3
+else 4 end as price_category_sort, rank() over (partition by month, t3.marketcap_category, t3.price_category order by t3.purchase_price desc) rank
+from
+(select ft.month, ft.ticker, ft.sector, ft.market, ft.stock_name, substr(ft.market_cap, 2, length(ft.market_cap)-2) marketcap2, right(ft.market_cap,1) as unit, 
+case when unit = 'M' then round(marketcap2*1000000,0)
+when unit = 'B' then round(marketcap2*1000000000,0) 
+else round(marketcap2,0) end as marketcap, ft.purchase_price, 
+case when substr(ft.purchase_price,2) < 25000 then 'Low' 
+when substr(ft.purchase_price,2) >= 25000 and substr(ft.purchase_price,2) < 50000 then 'Medium'
+when substr(ft.purchase_price,2) >= 50000 and substr(ft.purchase_price,2) < 75000 then 'High'
+else 'Very High' end as price_category,
+case when marketcap < 100000000 then 'Small'
+when marketcap >= 100000000 and marketcap < 1000000000 then 'Medium'
+when marketcap >= 1000000000 and marketcap < 100000000000 then 'Large'
+else 'Huge' end as marketcap_category
+from
+(select *, '1' as month from pd2023_wk08_01 union
+select *, '2' as month from pd2023_wk08_02 union
+select *, '3' as month from pd2023_wk08_03 union
+select *, '4' as month from pd2023_wk08_04 union
+select *, '5' as month from pd2023_wk08_05 union
+select *, '6' as month from pd2023_wk08_06 union
+select *, '7' as month from pd2023_wk08_07 union
+select *, '8' as month from pd2023_wk08_08 union
+select *, '9' as month from pd2023_wk08_09 union
+select *, '10' as month from pd2023_wk08_10 union
+select *, '11' as month from pd2023_wk08_11 union
+select *, '12' as month from pd2023_wk08_12) ft
+where ft.market_cap != 'n/a') t3
+order by month, t3.marketcap_category asc, price_category_sort desc, t3.purchase_price desc;
+
+select marketcap_category, price_category, month, ticker, sector, market, stock_name, marketcap, purchase_price, rank
+from
+(select to_double(t3.month) month, t3.ticker, t3.sector, t3.market, t3.stock_name, t3.marketcap, t3.purchase_price, t3.marketcap_category, t3.price_category,
+case when t3.price_category = 'Low' then 1
+when t3.price_category = 'Medium' then 2 
+when t3.price_category = 'High' then 3
+else 4 end as price_category_sort, rank() over (partition by month, t3.marketcap_category, t3.price_category order by t3.purchase_price desc) rank
+from
+(select ft.month, ft.ticker, ft.sector, ft.market, ft.stock_name, substr(ft.market_cap, 2, length(ft.market_cap)-2) marketcap2, right(ft.market_cap,1) as unit, 
+case when unit = 'M' then round(marketcap2*1000000,0)
+when unit = 'B' then round(marketcap2*1000000000,0) 
+else round(marketcap2,0) end as marketcap, ft.purchase_price, 
+case when substr(ft.purchase_price,2) < 25000 then 'Low' 
+when substr(ft.purchase_price,2) >= 25000 and substr(ft.purchase_price,2) < 50000 then 'Medium'
+when substr(ft.purchase_price,2) >= 50000 and substr(ft.purchase_price,2) < 75000 then 'High'
+else 'Very High' end as price_category,
+case when marketcap < 100000000 then 'Small'
+when marketcap >= 100000000 and marketcap < 1000000000 then 'Medium'
+when marketcap >= 1000000000 and marketcap < 100000000000 then 'Large'
+else 'Huge' end as marketcap_category
+from
+(select *, '1' as month from pd2023_wk08_01 union
+select *, '2' as month from pd2023_wk08_02 union
+select *, '3' as month from pd2023_wk08_03 union
+select *, '4' as month from pd2023_wk08_04 union
+select *, '5' as month from pd2023_wk08_05 union
+select *, '6' as month from pd2023_wk08_06 union
+select *, '7' as month from pd2023_wk08_07 union
+select *, '8' as month from pd2023_wk08_08 union
+select *, '9' as month from pd2023_wk08_09 union
+select *, '10' as month from pd2023_wk08_10 union
+select *, '11' as month from pd2023_wk08_11 union
+select *, '12' as month from pd2023_wk08_12) ft
+where ft.market_cap != 'n/a') t3
+order by month, t3.marketcap_category asc, price_category_sort desc, t3.purchase_price desc)
+where rank <= 5;
