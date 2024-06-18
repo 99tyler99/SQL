@@ -1,0 +1,65 @@
+select * from pd2023_wk07_transaction_path;
+select * from pd2023_wk07_transaction_detail;
+select * from pd2023_wk07_account_information;
+select * from pd2023_wk07_account_holders;
+
+select account_number, account_type, split_part(account_holder_id,', ',1) account_holder_id, balance_date, balance
+from pd2023_wk07_account_information
+where account_type = 'Joint'
+union
+select account_number, account_type, split_part(account_holder_id,', ',2) account_holder_id, balance_date, balance
+from pd2023_wk07_account_information
+where account_type = 'Joint'
+union 
+select * from pd2023_wk07_account_information
+where account_type != 'Joint';
+
+select to_varchar(account_holder_id) account_holder_id, name, date_of_birth, concat('0',contact_number) contact_number, first_line_of_address
+from pd2023_wk07_account_holders;
+
+select tp.transaction_id, tp.account_to, tp.account_from, td.transaction_date, td.value, td.cancelled_
+from pd2023_wk07_transaction_path tp
+inner join pd2023_wk07_transaction_detail td on tp.transaction_id = td.transaction_id;
+
+select ai.account_number, ai.account_type, ai.account_holder_id, ai.balance_date, ai.balance, ah.name, ah.date_of_birth, ah.contact_number, ah.first_line_of_address 
+from (select account_number, account_type, split_part(account_holder_id,', ',1) account_holder_id, balance_date, balance
+from pd2023_wk07_account_information
+where account_type = 'Joint'
+union
+select account_number, account_type, split_part(account_holder_id,', ',2) account_holder_id, balance_date, balance
+from pd2023_wk07_account_information
+where account_type = 'Joint'
+union 
+select account_number, account_type, account_holder_id, balance_date, balance 
+from pd2023_wk07_account_information
+where account_type != 'Joint') ai
+inner join
+(select to_varchar(account_holder_id) account_holder_id, name, date_of_birth, concat('0',contact_number) contact_number, first_line_of_address
+from pd2023_wk07_account_holders) ah
+on ai.account_holder_id = ah.account_holder_id;
+
+select tt.transaction_id,tt.account_to,tt.transaction_date,tt.value,at.account_number,at.account_type,at.balance_date,at.balance,at.name,at.date_of_birth,at.contact_number,at.first_line_of_address 
+from (select tp.transaction_id, tp.account_to, tp.account_from, td.transaction_date, td.value, td.cancelled_
+from pd2023_wk07_transaction_path tp
+inner join pd2023_wk07_transaction_detail td on tp.transaction_id = td.transaction_id) tt
+inner join 
+(select ai.account_number, ai.account_type, ai.account_holder_id, ai.balance_date, ai.balance, ah.name, ah.date_of_birth, ah.contact_number, ah.first_line_of_address 
+from (select account_number, account_type, split_part(account_holder_id,', ',1) account_holder_id, balance_date, balance
+from pd2023_wk07_account_information
+where account_type = 'Joint'
+union
+select account_number, account_type, split_part(account_holder_id,', ',2) account_holder_id, balance_date, balance
+from pd2023_wk07_account_information
+where account_type = 'Joint'
+union 
+select account_number, account_type, account_holder_id, balance_date, balance 
+from pd2023_wk07_account_information
+where account_type != 'Joint') ai
+inner join
+(select to_varchar(account_holder_id) account_holder_id, name, date_of_birth, concat('0',contact_number) contact_number, first_line_of_address
+from pd2023_wk07_account_holders) ah
+on ai.account_holder_id = ah.account_holder_id) at
+on tt.account_from = at.account_number
+where tt.cancelled_ = 'N'
+and tt.value >= 1000
+and at.account_type != 'Platinum';
