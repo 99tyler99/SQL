@@ -1,0 +1,69 @@
+select * from pd2024_wk10_transaction;
+select * from pd2024_wk10_product;
+select * from pd2024_wk10_loyalty;
+
+select split_part("Transaction_Date",',',1) as weekday,to_date(concat(split_part("Transaction_Date",', ',2), split_part("Transaction_Date",',',3)), 'MMMM DD YYYY') as date, "Transanction_Number" transaction_number, "Product_ID", case when "Cash_or_Card" = 1 then 'Card' else 'Cash' end as cash_or_card,"Loyalty_Number", "Sales_Before_Discount" 
+from pd2024_wk10_transaction 
+where date_part('year', date) >= 2023
+order by date;
+
+select concat("Product_Type", '-', replace("Product_Scent",' ','_'), '-', case when "Pack_Size" is null then "Product_Size" else "Pack_Size" end) as product_name,
+"Unit_Cost", "Selling_Price"
+from pd2024_wk10_product;
+
+select *, t1."Sales_Before_Discount"/t2."Selling_Price" as quantity from 
+(select split_part("Transaction_Date",',',1) as weekday,to_date(concat(split_part("Transaction_Date",', ',2), split_part("Transaction_Date",',',3)), 'MMMM DD YYYY') as date, "Transanction_Number" transaction_number, "Product_ID", case when "Cash_or_Card" = 1 then 'Card' else 'Cash' end as cash_or_card,"Loyalty_Number", "Sales_Before_Discount" 
+from pd2024_wk10_transaction 
+where date_part('year', date) >= 2023
+order by date) t1
+left join 
+(select concat("Product_Type", '-', replace("Product_Scent",' ','_'), '-', case when "Pack_Size" is null then "Product_Size" else "Pack_Size" end) as product_name,
+"Unit_Cost", "Selling_Price"
+from pd2024_wk10_product) t2 on t1."Product_ID" = t2.product_name;
+
+select initcap(to_varchar(customername)) customername, "Loyalty_Number",
+case when left("Loyalty_Tier",1) = 'B' or left("Loyalty_Tier", 1) = 'b' then 'Bronze'
+when left("Loyalty_Tier", 1) = 'G' or left("Loyalty_Tier", 1) = 'g' then 'Gold'
+when "Loyalty_Tier" is null then "Loyalty_Tier"
+else 'Silver' end as loyalty_tier,
+case when "Loyalty_Discount" = '5%' then 0.05
+when "Loyalty_Discount" = '10%' then 0.1
+when "Loyalty_Discount" = '15%' then 0.15
+when "Loyalty_Discount" is null and loyalty_tier = 'Bronze' then 0.05
+else 0 end as loyalty_discount
+from
+(select concat(split_part("Customer_Name",', ',2), ' ', split_part("Customer_Name",', ', 1)) as customername, "Loyalty_Discount", "Loyalty_Tier", "Loyalty_Number" 
+from pd2024_wk10_loyalty)
+order by loyalty_discount;
+
+select t3.date "transaction date", t3.transaction_number "transaction number", t3.cash_or_card "cash or card", t3."Sales_Before_Discount" "sales before discount",
+t3.product_name "product name", t3."Unit_Cost" "unit cost", t3."Selling_Price" "selling price", t3.quantity, t4.customername "customer name", t4."Loyalty_Number" "loyalty number",
+t4.loyalty_tier "loyalty tier", t4.loyalty_discount "loyalty discount",
+case when t4.loyalty_discount is null then t3."Sales_Before_Discount"
+else round(t3."Sales_Before_Discount"*(1-t4.loyalty_discount),2) end as "sales after discount",
+"sales after discount" - (t3."Unit_Cost"*t3.quantity) profit
+from
+(select *, t1."Sales_Before_Discount"/t2."Selling_Price" as quantity from 
+(select split_part("Transaction_Date",',',1) as weekday,to_date(concat(split_part("Transaction_Date",', ',2), split_part("Transaction_Date",',',3)), 'MMMM DD YYYY') as date, "Transanction_Number" transaction_number, "Product_ID", case when "Cash_or_Card" = 1 then 'Card' else 'Cash' end as cash_or_card,"Loyalty_Number", "Sales_Before_Discount" 
+from pd2024_wk10_transaction 
+where date_part('year', date) >= 2023
+order by date) t1
+left join 
+(select concat("Product_Type", '-', replace("Product_Scent",' ','_'), '-', case when "Pack_Size" is null then "Product_Size" else "Pack_Size" end) as product_name,
+"Unit_Cost", "Selling_Price"
+from pd2024_wk10_product) t2 on t1."Product_ID" = t2.product_name) t3
+left join 
+(select initcap(to_varchar(customername)) customername, "Loyalty_Number",
+case when left("Loyalty_Tier",1) = 'B' or left("Loyalty_Tier", 1) = 'b' then 'Bronze'
+when left("Loyalty_Tier", 1) = 'G' or left("Loyalty_Tier", 1) = 'g' then 'Gold'
+when "Loyalty_Tier" is null then "Loyalty_Tier"
+else 'Silver' end as loyalty_tier,
+case when "Loyalty_Discount" = '5%' then 0.05
+when "Loyalty_Discount" = '10%' then 0.1
+when "Loyalty_Discount" = '15%' then 0.15
+when "Loyalty_Discount" is null and loyalty_tier = 'Bronze' then 0.05
+else 0 end as loyalty_discount
+from
+(select concat(split_part("Customer_Name",', ',2), ' ', split_part("Customer_Name",', ', 1)) as customername, "Loyalty_Discount", "Loyalty_Tier", "Loyalty_Number" 
+from pd2024_wk10_loyalty)
+order by loyalty_discount) t4 on t3."Loyalty_Number" = t4."Loyalty_Number";

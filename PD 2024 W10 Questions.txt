@@ -1,0 +1,66 @@
+2024: Week 10 - Preppin' for Pulse
+March 06, 2024
+Challenge by: Jenny Martin
+
+Tableau Product Manager, Libby Knell has challenged us to create a Preppin' Data challenge that gets data in shape for working with the newly released Tableau Pulse. Pulse empowers every employee to make better, faster decisions by tracking a metric’s current value, compared to the past — so what does this mean for the shape of our data? Currently, Pulse works best with:
+
+Data that is up to date and recent - the last 1 or 2 years and changes regularly - daily or weekly preferable
+Data that is complete, without gaps
+Data that is as granular as possible
+The names of fields are human readable - let’s not use acronyms that lack context!
+String values in the data are consistently named
+Chin & Beard Suds Co are excited to get started using Tableau Pulse so their employees can make smarter decisions for their flagship store. Their store manager is always on the go and works off their phone daily. With the insights Pulse provides, they’ll be better able to keep track of which products are selling well and might need to be restocked sooner than anticipated. Even better, digests on Email and Slack, as well as Tableau Pulse on Tableau Mobile, meets them where they are so they can stay on top of their daily changing data!
+Inputs
+1. Transaction Data 
+
+
+2. Product Table 
+
+
+3. Loyalty Table 
+
+
+Requirements
+Input the data
+Filter to the last 2 years of data i.e. only 2023 and 2024 transactions
+This will allow for year on year comparison
+Create additional rows of data for the days the store was closed, ensuring all other fields will have null values
+The store is closed on Sundays and Public Holidays
+Update the Cash_or_Card field so that:
+1=Card
+2=Cash
+Join the Product Table
+You'll need to prepare the join clause fields first
+Calculate the Quantity of each transaction 
+Defined as the Sales_Before_Discount / Selling_Price
+In the Loyalty Table:
+The Customer_Name is currently reading Last Name, First Name. Update it to read First Name Last Name in Title case
+e.g. knell, libby becomes Libby Knell
+Group together the Loyalty_Tiers into Gold, Silver and Bronze
+Update the Loyalty_Discount to be a numeric field
+Join the Loyalty Table
+Create a Sales_After_Discount field to apply the Loyalty_Discount for transactions with a Loyalty_Number
+Calculate the Profit, defined as:
+Sales_After_Discount - (Unit_Cost * Quantity)
+Update the field names to remove all underscores and replace them with spaces
+Remove any unnecessary fields
+Output the data
+If you're working in a tool that allows you to create a Published Data Source, that would be best, as we're preparing the data for Pulse!
+Output
+
+14 fields
+Transaction Date
+Transaction Number
+Product Type
+Product Scent
+Product Size
+Cash or Card
+Loyalty Number
+Customer Name
+Loyalty Tier
+Loyalty Discount
+Quantity
+Sales Before Discount
+Sales After Discount
+Profit
+39,337 rows (39,338 including headers)
