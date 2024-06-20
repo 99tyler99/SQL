@@ -1,0 +1,44 @@
+select *, 1 as month from pd2023_wk04_january union
+select *, 2 as month from pd2023_wk04_february union
+select *, 3 as month from pd2023_wk04_march union
+select *, 4 as month from pd2023_wk04_april union
+select *, 5 as month from pd2023_wk04_may union
+select *, 6 as month from pd2023_wk04_june union
+select *, 7 as month from pd2023_wk04_july union
+select *, 8 as month from pd2023_wk04_august union
+select *, 9 as month from pd2023_wk04_september union
+select *, 10 as month from pd2023_wk04_october union
+select *, 11 as month from pd2023_wk04_november union
+select *, 12 as month from pd2023_wk04_december;
+
+select id, date_from_parts(2023,month,joining_day) joining_date, demographic, value
+from
+(select *, 1 as month from pd2023_wk04_january union
+select *, 2 as month from pd2023_wk04_february union
+select *, 3 as month from pd2023_wk04_march union
+select *, 4 as month from pd2023_wk04_april union
+select *, 5 as month from pd2023_wk04_may union
+select *, 6 as month from pd2023_wk04_june union
+select *, 7 as month from pd2023_wk04_july union
+select *, 8 as month from pd2023_wk04_august union
+select *, 9 as month from pd2023_wk04_september union
+select *, 10 as month from pd2023_wk04_october union
+select *, 11 as month from pd2023_wk04_november union
+select *, 12 as month from pd2023_wk04_december);
+
+select * from
+(select id, date_from_parts(2023,month,joining_day) joining_date, demographic, value
+from
+(select *, 1 as month from pd2023_wk04_january union
+select *, 2 as month from pd2023_wk04_february union
+select *, 3 as month from pd2023_wk04_march union
+select *, 4 as month from pd2023_wk04_april union
+select *, 5 as month from pd2023_wk04_may union
+select *, 6 as month from pd2023_wk04_june union
+select *, 7 as month from pd2023_wk04_july union
+select *, 8 as month from pd2023_wk04_august union
+select *, 9 as month from pd2023_wk04_september union
+select *, 10 as month from pd2023_wk04_october union
+select *, 11 as month from pd2023_wk04_november union
+select *, 12 as month from pd2023_wk04_december))
+pivot(min(value) for demographic in ('Account Type', 'Date of Birth', 'Ethnicity'));
