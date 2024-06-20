@@ -1,0 +1,46 @@
+select * from pd2023_wk01;
+select * from pd2023_wk03_targets;
+
+select transaction_code, value, customer_code, 
+case when online_or_in_person = 1 then 'Online'
+else 'In-Person' end as online_or_in_person, quarter(to_date(split_part(transaction_date,' ',1), 'DD/MM/YYYY')) as quarter
+from pd2023_wk01
+where left(transaction_code,3) = 'DSB';
+
+select  
+case when online_or_in_person = 1 then 'Online'
+else 'In-Person' end as online_or_in_person, 
+quarter(to_date(split_part(transaction_date,' ',1), 'DD/MM/YYYY')) as quarter,
+sum(value) as value
+from pd2023_wk01 
+where left(transaction_code,3) = 'DSB'
+group by quarter, online_or_in_person
+order by online_or_in_person, quarter;
+
+select * from pd2023_wk03_targets
+unpivot (target for quarter in (q1, q2, q3, q4));
+
+select online_or_in_person, to_double(right(quarter, 1)) quarter, target
+from
+(select * from pd2023_wk03_targets
+unpivot (target for quarter in (q1, q2, q3, q4)));
+
+select t1.online_or_in_person, t1.quarter, t1.value, t2.target, t1.value - t2.target variance_to_target
+from 
+(select  
+case when online_or_in_person = 1 then 'Online'
+else 'In-Person' end as online_or_in_person, 
+quarter(to_date(split_part(transaction_date,' ',1), 'DD/MM/YYYY')) as quarter,
+sum(value) as value
+from pd2023_wk01 
+where left(transaction_code,3) = 'DSB'
+group by quarter, online_or_in_person
+order by online_or_in_person, quarter) t1
+inner join 
+(select online_or_in_person, to_double(right(quarter, 1)) quarter, target
+from
+(select * from pd2023_wk03_targets
+unpivot (target for quarter in (q1, q2, q3, q4)))) t2
+on t1.online_or_in_person = t2.online_or_in_person
+and t1.quarter = t2.quarter
+order by variance_to_target desc;
