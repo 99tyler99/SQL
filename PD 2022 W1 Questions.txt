@@ -1,6 +1,6 @@
 2022: Week 1 The Prep School - Parental Contact Details
 January 05, 2022
-Challenge by: Carl Allchin is best
+Challenge by: Carl Allchin
 
 Welcome to Preppin' Data 2022. When Jonathan and I started Preppin' back in 2019 I never thought we'd be still thinking up challenges after this long. But we are seeing lots of people still wanting to practice their data prep skills so Jenny, Tom and myself will keep creating fun challenges for you to be ready for data prep challenges. 
 
